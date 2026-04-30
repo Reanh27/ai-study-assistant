@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Study Assistant Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Welcome, {{ username }}!</h1>
+
+        <a href="/dashboard">
+            <button>Progress Dashboard</button>
+        </a>
+        
+        <a href="/history">
+            <button>View Study History</button>
+        </a>
+
+        <a href="/logout">
+            <button>Logout</button>
+        </a>
+
+        <h2>📅 AI Study Planner</h2>
+
+        <input type="text" id="subject" placeholder="Enter subject"><br>
+        <input type="number" id="hours" placeholder="Study hours"><br>
+        <input type="text" id="weakness" placeholder="Weak topics"><br>
+
+        <button onclick="getPlan()">Generate Plan</button>
+
+        <ul id="result"></ul>
+
+        <h2>💬 Study Chatbot</h2>
+
+        <input type="text" id="chatInput" placeholder="Ask a study question"><br>
+
+        <button onclick="sendMessage()">Ask</button>
+
+        <p id="chatResponse"></p>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>

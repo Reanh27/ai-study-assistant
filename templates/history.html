@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Plan History</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>📚 Saved Study Plans</h1>
+
+        <a href="/">
+            <button>Back to Dashboard</button>
+        </a>
+
+        <ul>
+            {% for plan in plans %}
+                <li>
+                    <strong>Subject:</strong> {{ plan[0] }}<br>
+                    <strong>Hours:</strong> {{ plan[1] }}<br>
+                    <strong>Weakness:</strong> {{ plan[2] }}<br>
+                    <strong>Plan:</strong> {{ plan[3] }}
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>📊 Progress Dashboard</h1>
+
+        <a href="/">
+            <button>Back to Dashboard</button>
+        </a>
+
+        <h2>Total Study Plans Created:</h2>
+        <p>{{ total_plans }}</p>
+
+        <h2>Subjects Studied:</h2>
+
+        <ul>
+            {% for subject in subjects %}
+                <li>{{ subject[0] }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+</body>
+</html>
