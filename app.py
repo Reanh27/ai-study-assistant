@@ -1,35 +1,57 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, send_file
 import sqlite3
+import os
+from werkzeug.utils import secure_filename
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 app.secret_key = "study_assistant_secret_key"
 
+# ---------------- CONFIG ----------------
+DATABASE = "users.db"
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# ---------------- DATABASE SETUP ----------------
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+
+# ---------------- DATABASE HELPERS ----------------
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    return conn
+
+
 def init_db():
-    conn = sqlite3.connect("users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Users table
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
         )
-    ''')
+    """)
 
-    # Study plans table
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS study_plans (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT,
-            subject TEXT,
-            hours TEXT,
-            weakness TEXT,
-            plan TEXT
+            username TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            hours TEXT NOT NULL,
+            weakness TEXT NOT NULL,
+            plan TEXT NOT NULL
         )
-    ''')
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            filename TEXT NOT NULL
+        )
+    """)
 
     conn.commit()
     conn.close()
@@ -38,53 +60,74 @@ def init_db():
 init_db()
 
 
-# ---------------- STUDY PLAN LOGIC ----------------
+# ---------------- STUDY PLAN ENGINE ----------------
 def generate_plan(subject, hours, weakness):
-    plan = []
+    steps = []
 
-    hours = int(hours)
+    try:
+        hours = int(hours)
+    except (ValueError, TypeError):
+        hours = 2
 
-    if "math" in subject.lower():
-        plan.append("Revise formulas")
-        plan.append("Practice problems")
+    subject = subject.lower()
+    weakness = weakness.lower()
 
-    if "calculus" in weakness.lower():
-        plan.append("Focus on derivatives")
-        plan.append("Solve 5 questions")
+    if "math" in subject:
+        steps.extend([
+            "Revise formulas",
+            "Practice problems"
+        ])
 
-    if "physics" in subject.lower():
-        plan.append("Revise formulas and core concepts")
-        plan.append("Practice numerical problems")
+    if "calculus" in weakness:
+        steps.extend([
+            "Focus on derivatives",
+            "Solve 5 questions"
+        ])
 
-    if "chemistry" in subject.lower():
-        plan.append("Revise chemical equations")
-        plan.append("Practice reaction mechanisms")
+    if "physics" in subject:
+        steps.extend([
+            "Revise formulas and concepts",
+            "Solve numericals"
+        ])
 
-    if "programming" in subject.lower():
-        plan.append("Practice coding exercises")
-        plan.append("Build small projects")
+    if "chemistry" in subject:
+        steps.extend([
+            "Study equations and reactions",
+            "Practice core concepts"
+        ])
 
-    plan.append(f"Study for {hours} hours with breaks")
+    if "programming" in subject:
+        steps.extend([
+            "Practice coding exercises",
+            "Build mini projects"
+        ])
 
-    return plan
+    if not steps:
+        steps.extend([
+            "Revise important concepts",
+            "Practice weak topics"
+        ])
+
+    steps.append(f"Study for {hours} hours with breaks")
+
+    return steps
 
 
-# ---------------- HOME ----------------
-@app.route('/')
+# ---------------- AUTH ----------------
+@app.route("/")
 def home():
-    if 'user' in session:
-        return render_template("index.html", username=session['user'])
-    return redirect(url_for('login'))
+    if "user" not in session:
+        return redirect(url_for("login"))
+    return render_template("index.html", username=session["user"])
 
 
-# ---------------- REGISTER ----------------
-@app.route('/register', methods=['GET', 'POST'])
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        conn = sqlite3.connect("users.db")
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         try:
@@ -93,29 +136,27 @@ def register():
                 (username, password)
             )
             conn.commit()
-
-        except:
+        except sqlite3.IntegrityError:
             conn.close()
             return "Username already exists!"
 
         conn.close()
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
 
     return render_template("register.html")
 
 
-# ---------------- LOGIN ----------------
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        conn = sqlite3.connect("users.db")
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute(
-            "SELECT * FROM users WHERE username=? AND password=?",
+            "SELECT * FROM users WHERE username = ? AND password = ?",
             (username, password)
         )
 
@@ -123,120 +164,97 @@ def login():
         conn.close()
 
         if user:
-            session['user'] = username
-            return redirect(url_for('home'))
-        else:
-            return "Invalid credentials!"
+            session["user"] = username
+            return redirect(url_for("home"))
+
+        return "Invalid credentials!"
 
     return render_template("login.html")
 
 
-# ---------------- LOGOUT ----------------
-@app.route('/logout')
+@app.route("/logout")
 def logout():
-    session.pop('user', None)
-    return redirect(url_for('login'))
+    session.pop("user", None)
+    return redirect(url_for("login"))
 
 
-# ---------------- STUDY PLAN ----------------
-@app.route('/plan', methods=['POST'])
-def plan():
-    data = request.json
+# ---------------- STUDY PLAN API ----------------
+@app.route("/plan", methods=["POST"])
+def create_plan():
+    data = request.get_json()
 
-    subject = data['subject']
-    hours = data['hours']
-    weakness = data['weakness']
+    subject = data.get("subject", "")
+    hours = data.get("hours", 2)
+    weakness = data.get("weakness", "")
 
-    generated_plan = generate_plan(subject, hours, weakness)
+    plan = generate_plan(subject, hours, weakness)
 
-    # Save study plan to database
-    if 'user' in session:
-        conn = sqlite3.connect("users.db")
+    if "user" in session:
+        conn = get_db_connection()
         cursor = conn.cursor()
 
         cursor.execute(
-            '''
-            INSERT INTO study_plans
-            (username, subject, hours, weakness, plan)
+            """
+            INSERT INTO study_plans (username, subject, hours, weakness, plan)
             VALUES (?, ?, ?, ?, ?)
-            ''',
+            """,
             (
-                session['user'],
+                session["user"],
                 subject,
-                hours,
+                str(hours),
                 weakness,
-                ", ".join(generated_plan)
+                ", ".join(plan)
             )
         )
 
         conn.commit()
         conn.close()
 
-    return jsonify({"plan": generated_plan})
+    return jsonify({"plan": plan})
 
 
-# ---------------- ADVANCED CHATBOT ----------------
-@app.route('/chat', methods=['POST'])
+# ---------------- CHATBOT ----------------
+@app.route("/chat", methods=["POST"])
 def chat():
-    user_msg = request.json['message'].lower()
+    message = request.json.get("message", "").lower()
 
     try:
-        # Basic calculator
-        if any(op in user_msg for op in ['+', '-', '*', '/']):
-            answer = eval(user_msg)
-            reply = f"The answer is {answer}"
-
-        elif "derivative" in user_msg:
-            reply = "Derivative is the rate of change of a function."
-
-        elif "integration" in user_msg:
-            reply = "Integration helps calculate area under a curve."
-
-        elif "calculus" in user_msg:
-            reply = "Focus on limits, differentiation, and integration."
-
-        elif "physics" in user_msg:
-            reply = "Study formulas, laws, and solve numerical problems."
-
-        elif "chemistry" in user_msg:
-            reply = "Focus on reactions, equations, and conceptual understanding."
-
-        elif "programming" in user_msg:
-            reply = "Practice coding daily and strengthen logic-building."
-
-        elif "exam tips" in user_msg or "exam" in user_msg:
-            reply = "Revise weak topics first, solve past papers, and manage time effectively."
-
-        elif "motivation" in user_msg:
-            reply = "Consistency beats intensity. Study daily and trust progress."
-
-        elif "time management" in user_msg:
-            reply = "Use focused sessions like 50 mins study + 10 mins break."
-
-        elif "study plan" in user_msg:
-            reply = "Enter your subject, hours, and weak topics above to generate a personalized study plan."
-
+        if any(op in message for op in ["+", "-", "*", "/"]):
+            reply = f"The answer is {eval(message)}"
+        elif "derivative" in message:
+            reply = "Derivative measures the rate of change of a function."
+        elif "integration" in message:
+            reply = "Integration calculates area under a curve."
+        elif "physics" in message:
+            reply = "Focus on formulas, concepts, and numerical practice."
+        elif "chemistry" in message:
+            reply = "Revise reactions, equations, and theory."
+        elif "programming" in message:
+            reply = "Practice logic-building and coding projects daily."
+        elif "exam" in message:
+            reply = "Prioritize weak topics and solve previous papers."
+        elif "motivation" in message:
+            reply = "Consistency creates success—study daily."
         else:
-            reply = "I can help with academics, study plans, exams, and motivation!"
-
-    except:
-        reply = "I couldn't understand that. Try asking differently."
+            reply = "I can help with academics, study plans, and exam preparation!"
+    except Exception:
+        reply = "I couldn't understand that."
 
     return jsonify({"reply": reply})
 
 
-# ---------------- STUDY HISTORY ----------------
-@app.route('/history')
+# ---------------- HISTORY ----------------
+@app.route("/history")
 def history():
-    if 'user' not in session:
-        return redirect(url_for('login'))
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-    conn = sqlite3.connect("users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT subject, hours, weakness, plan FROM study_plans WHERE username=?",
-        (session['user'],)
+        "SELECT id, subject, hours, weakness, plan FROM study_plans WHERE username = ?",
+        (session["user"],)
     )
 
     plans = cursor.fetchall()
@@ -245,26 +263,24 @@ def history():
     return render_template("history.html", plans=plans)
 
 
-# ---------------- PROGRESS DASHBOARD ----------------
-@app.route('/dashboard')
+# ---------------- DASHBOARD ----------------
+@app.route("/dashboard")
 def dashboard():
-    if 'user' not in session:
-        return redirect(url_for('login'))
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-    conn = sqlite3.connect("users.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Total study plans
     cursor.execute(
-        "SELECT COUNT(*) FROM study_plans WHERE username=?",
-        (session['user'],)
+        "SELECT COUNT(*) FROM study_plans WHERE username = ?",
+        (session["user"],)
     )
     total_plans = cursor.fetchone()[0]
 
-    # Unique subjects
     cursor.execute(
-        "SELECT DISTINCT subject FROM study_plans WHERE username=?",
-        (session['user'],)
+        "SELECT DISTINCT subject FROM study_plans WHERE username = ?",
+        (session["user"],)
     )
     subjects = cursor.fetchall()
 
@@ -277,6 +293,64 @@ def dashboard():
     )
 
 
-# ---------------- MAIN ----------------
-if __name__ == '__main__':
-    app.run(debug=True)
+# ---------------- PDF DOWNLOAD ----------------
+@app.route("/download_plan/<int:plan_id>")
+def download_plan(plan_id):
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT subject, hours, weakness, plan FROM study_plans WHERE id = ? AND username = ?",
+        (plan_id, session["user"])
+    )
+
+    plan = cursor.fetchone()
+    conn.close()
+
+    if not plan:
+        return "Plan not found"
+
+    pdf_path = f"study_plan_{plan_id}.pdf"
+    pdf = canvas.Canvas(pdf_path)
+    pdf.setFont("Helvetica", 14)
+
+    pdf.drawString(100, 800, "AI Study Assistant - Study Plan Report")
+    pdf.drawString(100, 760, f"Subject: {plan[0]}")
+    pdf.drawString(100, 730, f"Hours: {plan[1]}")
+    pdf.drawString(100, 700, f"Weakness: {plan[2]}")
+    pdf.drawString(100, 670, "Generated Plan:")
+
+    y = 640
+    for line in plan[3].split(", "):
+        pdf.drawString(120, y, f"- {line}")
+        y -= 25
+
+    pdf.save()
+
+    return send_file(pdf_path, as_attachment=True)
+
+
+# ---------------- DOCUMENT UPLOAD ----------------
+@app.route("/upload", methods=["GET", "POST"])
+def upload_document():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        file = request.files.get("document")
+
+        if file and file.filename:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            file.save(filepath)
+
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            cursor.execute(
+                "INSERT INTO documents (username, filename) VALUES (?, ?)",
+                (session["user"], filename)
+            )

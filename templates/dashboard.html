@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -34,6 +35,11 @@
         </div>
 
         <div class="card">
+            <h2>📈 Study Progress Chart</h2>
+            <canvas id="progressChart"></canvas>
+        </div>
+
+        <div class="card">
             <h2>📘 Subjects You've Worked On</h2>
 
             <ul>
@@ -44,6 +50,52 @@
         </div>
 
     </div>
+
+    <script>
+        const totalPlans = parseInt("{{ total_plans }}");
+        const totalSubjects = parseInt("{{ subjects|length }}");
+
+        const ctx = document.getElementById('progressChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Study Plans', 'Subjects'],
+                datasets: [{
+                    label: 'Your Progress',
+                    data: [totalPlans, totalSubjects],
+                    backgroundColor: [
+                        'rgba(0, 198, 255, 0.7)',
+                        'rgba(0, 114, 255, 0.7)'
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>

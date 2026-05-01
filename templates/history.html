@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study History</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>📚 Study History</h1>
-        <p class="subtitle">Review your previous personalized study plans</p>
+    <h1>📚 Study History</h1>
 
-        <div class="top-buttons">
-            <a href="/"><button>🏠 Home</button></a>
-            <a href="/dashboard"><button>📊 Dashboard</button></a>
-            <a href="/logout"><button>🚪 Logout</button></a>
-        </div>
-
-        <div class="card">
-            <h2>📝 Saved Study Plans</h2>
-
-            <ul>
-                {% for plan in plans %}
-                    <li>
-                        <strong>Subject:</strong> {{ plan[0] }}<br>
-                        <strong>Hours:</strong> {{ plan[1] }}<br>
-                        <strong>Weakness:</strong> {{ plan[2] }}<br>
-                        <strong>Plan:</strong> {{ plan[3] }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
+    <div class="top-buttons">
+        <a href="/"><button>🏠 Home</button></a>
+        <a href="/dashboard"><button>📊 Dashboard</button></a>
+        <a href="/upload"><button>📁 Documents</button></a>
+        <a href="/logout"><button>🚪 Logout</button></a>
     </div>
+
+    <div class="card">
+        <ul>
+            {% for plan in plans %}
+            <li>
+                <strong>Subject:</strong> {{ plan[1] }}<br>
+                <strong>Hours:</strong> {{ plan[2] }}<br>
+                <strong>Weakness:</strong> {{ plan[3] }}<br>
+                <strong>Plan:</strong> {{ plan[4] }}<br><br>
+
+                <a href="/download_plan/{{ plan[0] }}">
+                    <button>📄 Download PDF</button>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
 
 </body>
 </html>
