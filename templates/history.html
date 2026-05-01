@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Study Plan History</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
     <div class="container">
 
-        <h1>📚 Saved Study Plans</h1>
+        <h1>📚 Study History</h1>
+        <p class="subtitle">Review your previous personalized study plans</p>
 
-        <a href="/">
-            <button>Back to Dashboard</button>
-        </a>
+        <div class="top-buttons">
+            <a href="/"><button>🏠 Home</button></a>
+            <a href="/dashboard"><button>📊 Dashboard</button></a>
+            <a href="/logout"><button>🚪 Logout</button></a>
+        </div>
 
-        <ul>
-            {% for plan in plans %}
-                <li>
-                    <strong>Subject:</strong> {{ plan[0] }}<br>
-                    <strong>Hours:</strong> {{ plan[1] }}<br>
-                    <strong>Weakness:</strong> {{ plan[2] }}<br>
-                    <strong>Plan:</strong> {{ plan[3] }}
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="card">
+            <h2>📝 Saved Study Plans</h2>
+
+            <ul>
+                {% for plan in plans %}
+                    <li>
+                        <strong>Subject:</strong> {{ plan[0] }}<br>
+                        <strong>Hours:</strong> {{ plan[1] }}<br>
+                        <strong>Weakness:</strong> {{ plan[2] }}<br>
+                        <strong>Plan:</strong> {{ plan[3] }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
     </div>
 

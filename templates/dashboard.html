@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
     <div class="container">
 
         <h1>📊 Progress Dashboard</h1>
+        <p class="subtitle">Track your academic growth and productivity</p>
 
-        <a href="/">
-            <button>Back to Dashboard</button>
-        </a>
+        <div class="top-buttons">
+            <a href="/"><button>🏠 Home</button></a>
+            <a href="/history"><button>📚 History</button></a>
+            <a href="/logout"><button>🚪 Logout</button></a>
+        </div>
 
-        <h2>Total Study Plans Created:</h2>
-        <p>{{ total_plans }}</p>
+        <div class="stats">
 
-        <h2>Subjects Studied:</h2>
+            <div class="stat-box">
+                <h2>{{ total_plans }}</h2>
+                <p>Total Study Plans Created</p>
+            </div>
 
-        <ul>
-            {% for subject in subjects %}
-                <li>{{ subject[0] }}</li>
-            {% endfor %}
-        </ul>
+            <div class="stat-box">
+                <h2>{{ subjects|length }}</h2>
+                <p>Subjects Studied</p>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <h2>📘 Subjects You've Worked On</h2>
+
+            <ul>
+                {% for subject in subjects %}
+                    <li>{{ subject[0] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
     </div>
 

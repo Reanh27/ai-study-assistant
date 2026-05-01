@@ -9,28 +9,44 @@
 <body>
 
     <div class="container">
-        <h1>AI Study Planner</h1>
 
-        <form id="studyForm">
-            <input type="text" id="subject" placeholder="Enter subject" required>
-            <input type="number" id="hours" placeholder="Study hours" required>
-            <input type="text" id="weakness" placeholder="Weak topics" required>
-            <button type="submit">Generate Plan</button>
-        </form>
+        <h1>🎓 AI Study Assistant</h1>
+        <p class="subtitle">Plan smarter. Study better. Achieve more.</p>
+
+        <div class="top-buttons">
+            <a href="/dashboard"><button>📊 Dashboard</button></a>
+            <a href="/history"><button>📚 History</button></a>
+            <a href="/logout"><button>🚪 Logout</button></a>
+        </div>
 
         <div class="card">
-            <h2>Your Study Plan</h2>
+            <h2>📅 Generate Your Study Plan</h2>
+
+            <form id="studyForm">
+                <input type="text" id="subject" placeholder="Enter subject" required>
+                <input type="number" id="hours" placeholder="Study hours available" required>
+                <input type="text" id="weakness" placeholder="Weak topics" required>
+
+                <button type="submit">Generate Study Plan</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📘 Your Personalized Study Plan</h2>
             <ul id="result"></ul>
         </div>
 
         <div class="card">
-            <h2>Study Chatbot</h2>
-            <input type="text" id="chatInput" placeholder="Ask a study question">
-            <button onclick="askAI()">Ask</button>
+            <h2>🤖 AI Study Chatbot</h2>
+
+            <input type="text" id="chatInput" placeholder="Ask me anything about studies...">
+            <button onclick="askAI()">Ask AI</button>
+
             <div class="chat-box">
-                <p id="chatResponse">I'm here to help with your studies!</p>
+                <p id="chatResponse">Hello! I'm your AI study assistant.</p>
             </div>
         </div>
+
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
