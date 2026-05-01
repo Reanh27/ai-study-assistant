@@ -354,3 +354,5 @@ def upload_document():
                 "INSERT INTO documents (username, filename) VALUES (?, ?)",
                 (session["user"], filename)
             )
+        if __name__ == "__main__":
+         app.run(debug=True)
