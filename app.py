@@ -354,5 +354,26 @@ def upload_document():
                 "INSERT INTO documents (username, filename) VALUES (?, ?)",
                 (session["user"], filename)
             )
-        if __name__ == "__main__":
-         app.run(debug=True)
+
+            conn.commit()
+            conn.close()
+
+            return redirect(url_for("upload_document"))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT filename FROM documents WHERE username = ?",
+        (session["user"],)
+    )
+
+    documents = cursor.fetchall()
+    conn.close()
+
+    return render_template("upload.html", documents=documents)
+
+
+# ---------------- RUN APP ----------------
+if __name__ == "__main__":
+    app.run(debug=True)
