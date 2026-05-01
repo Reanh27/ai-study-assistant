@@ -1,48 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Study Assistant Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
     <div class="container">
+        <h1>AI Study Planner</h1>
 
-        <h1>Welcome, {{ username }}!</h1>
+        <form id="studyForm">
+            <input type="text" id="subject" placeholder="Enter subject" required>
+            <input type="number" id="hours" placeholder="Study hours" required>
+            <input type="text" id="weakness" placeholder="Weak topics" required>
+            <button type="submit">Generate Plan</button>
+        </form>
 
-        <a href="/dashboard">
-            <button>Progress Dashboard</button>
-        </a>
-        
-        <a href="/history">
-            <button>View Study History</button>
-        </a>
+        <div class="card">
+            <h2>Your Study Plan</h2>
+            <ul id="result"></ul>
+        </div>
 
-        <a href="/logout">
-            <button>Logout</button>
-        </a>
-
-        <h2>📅 AI Study Planner</h2>
-
-        <input type="text" id="subject" placeholder="Enter subject"><br>
-        <input type="number" id="hours" placeholder="Study hours"><br>
-        <input type="text" id="weakness" placeholder="Weak topics"><br>
-
-        <button onclick="getPlan()">Generate Plan</button>
-
-        <ul id="result"></ul>
-
-        <h2>💬 Study Chatbot</h2>
-
-        <input type="text" id="chatInput" placeholder="Ask a study question"><br>
-
-        <button onclick="sendMessage()">Ask</button>
-
-        <p id="chatResponse"></p>
-
+        <div class="card">
+            <h2>Study Chatbot</h2>
+            <input type="text" id="chatInput" placeholder="Ask a study question">
+            <button onclick="askAI()">Ask</button>
+            <div class="chat-box">
+                <p id="chatResponse">I'm here to help with your studies!</p>
+            </div>
+        </div>
     </div>
 
-    <script src="/static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
