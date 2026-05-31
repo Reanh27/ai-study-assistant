@@ -3,46 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Progress Dashboard</title>
+    <title>AI Study Assistant Dashboard</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div class="container">
+<div class="sidebar">
 
-        <h1>📊 Progress Dashboard</h1>
-        <p class="subtitle">Track your academic growth and productivity</p>
+    <div class="logo">
+        🧠 AI Study Assistant
+        <span>Student Dashboard</span>
+    </div>
 
-        <div class="top-buttons">
-            <a href="/"><button>🏠 Home</button></a>
-            <a href="/history"><button>📚 History</button></a>
-            <a href="/logout"><button>🚪 Logout</button></a>
+    <div class="menu">
+        <a class="active" href="/dashboard">📊 Dashboard</a>
+        <a href="/">🏠 Home</a>
+        <a href="/history">📚 History</a>
+        <a href="#">🤖 AI Tutor</a>
+        <a href="#">📝 Quiz</a>
+        <a href="#">📒 Notes</a>
+        <a href="#">📅 Schedule</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+
+</div>
+
+<div class="main-content">
+
+    <h1>Dashboard</h1>
+
+    <div class="stats">
+
+        <div class="stat-box">
+            <h3>Study Plans</h3>
+            <h2>{{ total_plans }}</h2>
+            <p>Total Created</p>
         </div>
 
-        <div class="stats">
-
-            <div class="stat-box">
-                <h2>{{ total_plans }}</h2>
-                <p>Total Study Plans Created</p>
-            </div>
-
-            <div class="stat-box">
-                <h2>{{ subjects|length }}</h2>
-                <p>Subjects Studied</p>
-            </div>
-
+        <div class="stat-box">
+            <h3>Subjects</h3>
+            <h2>{{ subjects|length }}</h2>
+            <p>Studied</p>
         </div>
+
+        <div class="stat-box">
+            <h3>Progress</h3>
+            <h2>85%</h2>
+            <p>Learning Score</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Streak</h3>
+            <h2>12 🔥</h2>
+            <p>Days</p>
+        </div>
+
+    </div>
+
+    <div class="dashboard-grid">
 
         <div class="card">
-            <h2>📈 Study Progress Chart</h2>
+            <h2>📈 Study Progress</h2>
             <canvas id="progressChart"></canvas>
         </div>
 
         <div class="card">
-            <h2>📘 Subjects You've Worked On</h2>
+            <h2>📘 Subjects Worked On</h2>
 
-            <ul>
+            <ul class="subject-list">
                 {% for subject in subjects %}
                     <li>{{ subject[0] }}</li>
                 {% endfor %}
@@ -51,51 +81,51 @@
 
     </div>
 
-    <script>
-        const totalPlans = parseInt("{{ total_plans }}");
-        const totalSubjects = parseInt("{{ subjects|length }}");
+</div>
 
-        const ctx = document.getElementById('progressChart').getContext('2d');
+<script>
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Study Plans', 'Subjects'],
-                datasets: [{
-                    label: 'Your Progress',
-                    data: [totalPlans, totalSubjects],
-                    backgroundColor: [
-                        'rgba(0, 198, 255, 0.7)',
-                        'rgba(0, 114, 255, 0.7)'
-                    ],
-                    borderRadius: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: 'white'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: 'white'
-                        }
-                    }
+const totalPlans = parseInt("{{ total_plans }}");
+const totalSubjects = parseInt("{{ subjects|length }}");
+
+const ctx = document.getElementById('progressChart').getContext('2d');
+
+new Chart(ctx,{
+    type:'bar',
+    data:{
+        labels:['Study Plans','Subjects'],
+        datasets:[{
+            label:'Progress',
+            data:[totalPlans,totalSubjects],
+            backgroundColor:[
+                '#7c5cff',
+                '#00d4ff'
+            ],
+            borderRadius:10
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
                 }
             }
-        });
-    </script>
+        },
+        scales:{
+            x:{
+                ticks:{color:'white'}
+            },
+            y:{
+                ticks:{color:'white'},
+                beginAtZero:true
+            }
+        }
+    }
+});
+
+</script>
 
 </body>
 </html>

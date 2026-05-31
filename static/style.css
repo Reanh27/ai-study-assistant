@@ -128,3 +128,99 @@ a {
         padding: 20px;
     }
 }
+/* DASHBOARD V2 */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#11152f;
+    border-right:1px solid rgba(255,255,255,.05);
+}
+
+.logo{
+    padding:25px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logo span{
+    display:block;
+    font-size:13px;
+    color:#aaa;
+    margin-top:5px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:12px;
+    transition:.3s;
+}
+
+.menu a:hover,
+.menu .active{
+    background:#6c63ff;
+}
+
+.main-content{
+    margin-left:270px;
+    padding:40px;
+}
+
+.main-content h1{
+    text-align:left;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+.subject-list li{
+    margin-bottom:10px;
+}
+
+.stat-box h3{
+    color:#ccc;
+    margin-bottom:10px;
+}
+
+.stat-box h2{
+    font-size:36px;
+    margin:0;
+    color:#7c5cff;
+}
+
+.card canvas{
+    max-height:300px;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+
+    .main-content{
+        margin-left:0;
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+}
