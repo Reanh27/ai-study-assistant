@@ -118,8 +118,7 @@ def generate_plan(subject, hours, weakness):
 def home():
     if "user" not in session:
         return redirect(url_for("login"))
-    return render_template("index.html", username=session["user"])
-
+    return redirect(url_for("dashboard"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
