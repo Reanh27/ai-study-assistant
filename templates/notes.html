@@ -1,113 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Notes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notes</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="sidebar">
 
-    <h1>📝 Notes</h1>
+<div class="logo">
+🧠 AI Study Assistant
+<span>Smart Learning Hub</span>
+</div>
 
-    <div class="card">
+<div class="menu">
 
-        <input type="text"
-               placeholder="Note Title"
-               id="noteTitle">
+<a href="/dashboard">📊 Dashboard</a>
 
-        <br><br>
+<a href="/ai_tutor">🤖 AI Tutor</a>
 
-        <textarea
-            id="noteContent"
-            rows="15"
-            style="
-            width:100%;
-            padding:15px;
-            border-radius:10px;
-            border:none;
-            resize:none;
-            font-size:16px;
-            box-sizing:border-box;"
-            placeholder="Write your notes here..."></textarea>
+<a href="/quiz">📝 Quiz</a>
 
-        <br><br>
+<a href="/flashcards">📚 Flashcards</a>
 
-        <button onclick="saveNote()">
-            💾 Save Note
-        </button>
+<a class="active" href="/notes">📒 Notes</a>
 
-    </div>
+<a href="/schedule">📅 Schedule</a>
 
-    <div class="card">
+<a href="/history">📜 History</a>
 
-        <h2>Saved Notes</h2>
+<a href="/upload">📂 Documents</a>
 
-        <div id="savedNotes">
+<a href="/progress">📈 Progress</a>
 
-        </div>
+<a href="/profile">👤 Profile</a>
 
-    </div>
+<a href="/logout">🚪 Logout</a>
+
+</div>
+
+</div>
+
+<div class="main-content">
+
+<div class="header">
+
+<h1>📒 Notes Manager</h1>
+
+<p>Create and save notes to your database.</p>
+
+<button onclick="toggleTheme()">
+🌙 / ☀️ Theme
+</button>
+
+</div>
+
+<div class="card">
+
+<input
+type="text"
+id="noteTitle"
+placeholder="Enter Note Title">
+
+<textarea
+id="noteContent"
+rows="8"
+placeholder="Write your notes here...">
+</textarea>
+
+<button onclick="saveNote()">
+💾 Save Note
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Saved Notes</h2>
+
+<div id="notesContainer">
+
+Loading notes...
+
+</div>
+
+</div>
 
 </div>
 
 <script>
 
-function saveNote(){
+function toggleTheme(){
 
-    let title =
-    document.getElementById("noteTitle").value;
+document.body.classList.toggle("light-mode");
 
-    let content =
-    document.getElementById("noteContent").value;
+localStorage.setItem(
+"theme",
+document.body.classList.contains("light-mode")
+? "light"
+: "dark"
+);
 
-    if(title==="" || content===""){
-        alert("Fill all fields");
-        return;
-    }
-
-    let notes =
-    JSON.parse(localStorage.getItem("notes")) || [];
-
-    notes.push({
-        title:title,
-        content:content
-    });
-
-    localStorage.setItem(
-        "notes",
-        JSON.stringify(notes)
-    );
-
-    loadNotes();
-
-    document.getElementById("noteTitle").value="";
-    document.getElementById("noteContent").value="";
 }
 
-function loadNotes(){
+if(localStorage.getItem("theme")==="light"){
 
-    let notes =
-    JSON.parse(localStorage.getItem("notes")) || [];
+document.body.classList.add("light-mode");
 
-    let html="";
+}
 
-    notes.forEach(function(note){
+async function saveNote(){
 
-        html += `
-        <div style="
-        background:rgba(255,255,255,0.08);
-        padding:15px;
-        margin-bottom:10px;
-        border-radius:10px;">
-            <h3>${note.title}</h3>
-            <p>${note.content}</p>
-        </div>
-        `;
-    });
+let title =
+document.getElementById("noteTitle").value;
 
-    document.getElementById("savedNotes").innerHTML = html;
+let content =
+document.getElementById("noteContent").value;
+
+if(title==="" || content===""){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+await fetch("/save_note",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+title:title,
+content:content
+
+})
+
+});
+
+document.getElementById("noteTitle").value="";
+document.getElementById("noteContent").value="";
+
+loadNotes();
+
+}
+
+async function loadNotes(){
+
+const response =
+await fetch("/get_notes");
+
+const notes =
+await response.json();
+
+let html="";
+
+if(notes.length===0){
+
+html="<p>No notes available.</p>";
+
+}
+else{
+
+notes.forEach(note=>{
+
+html += `
+
+<div class="card" style="margin-top:15px;">
+
+<h3>${note[1]}</h3>
+
+<p>${note[2]}</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("notesContainer").innerHTML =
+html;
+
 }
 
 loadNotes();

@@ -406,6 +406,39 @@ def profile():
         "profile.html",
         username=session["user"]
     )
+
+
+@app.route("/save_note", methods=["POST"])
+def save_note():
+    if "user" not in session:
+        return jsonify({"status":"error"})
+    data = request.get_json()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO notes(username,title,content) VALUES(?,?,?)",
+        (session["user"], data.get("title",""), data.get("content",""))
+    )
+    conn.commit()
+    conn.close()
+    return jsonify({"status":"success"})
+
+
+@app.route("/get_notes")
+def get_notes():
+    if "user" not in session:
+        return jsonify([])
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id,title,content FROM notes WHERE username=? ORDER BY id DESC",
+        (session["user"],)
+    )
+    notes = cursor.fetchall()
+    conn.close()
+    return jsonify(notes)
+
+
 # ---------------- RUN APP ----------------
 if __name__ == "__main__":
     app.run(debug=True)
