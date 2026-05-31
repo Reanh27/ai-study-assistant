@@ -373,7 +373,39 @@ def upload_document():
 
     return render_template("upload.html", documents=documents)
 
+@app.route("/ai_tutor")
+def ai_tutor():
+    return render_template("ai_tutor.html")
 
+@app.route("/quiz")
+def quiz():
+    return render_template("quiz.html")
+
+@app.route("/flashcards")
+def flashcards():
+    return render_template("flashcards.html")
+
+@app.route("/notes")
+def notes():
+    return render_template("notes.html")
+
+@app.route("/schedule")
+def schedule():
+    return render_template("schedule.html")
+
+@app.route("/progress")
+def progress():
+    return render_template("progress.html")
+
+@app.route("/profile")
+def profile():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    return render_template(
+        "profile.html",
+        username=session["user"]
+    )
 # ---------------- RUN APP ----------------
 if __name__ == "__main__":
     app.run(debug=True)

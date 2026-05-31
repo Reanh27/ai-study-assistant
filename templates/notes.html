@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📝 Notes</h1>
+
+    <div class="card">
+
+        <input type="text"
+               placeholder="Note Title"
+               id="noteTitle">
+
+        <br><br>
+
+        <textarea
+            id="noteContent"
+            rows="15"
+            style="
+            width:100%;
+            padding:15px;
+            border-radius:10px;
+            border:none;
+            resize:none;
+            font-size:16px;
+            box-sizing:border-box;"
+            placeholder="Write your notes here..."></textarea>
+
+        <br><br>
+
+        <button onclick="saveNote()">
+            💾 Save Note
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Saved Notes</h2>
+
+        <div id="savedNotes">
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function saveNote(){
+
+    let title =
+    document.getElementById("noteTitle").value;
+
+    let content =
+    document.getElementById("noteContent").value;
+
+    if(title==="" || content===""){
+        alert("Fill all fields");
+        return;
+    }
+
+    let notes =
+    JSON.parse(localStorage.getItem("notes")) || [];
+
+    notes.push({
+        title:title,
+        content:content
+    });
+
+    localStorage.setItem(
+        "notes",
+        JSON.stringify(notes)
+    );
+
+    loadNotes();
+
+    document.getElementById("noteTitle").value="";
+    document.getElementById("noteContent").value="";
+}
+
+function loadNotes(){
+
+    let notes =
+    JSON.parse(localStorage.getItem("notes")) || [];
+
+    let html="";
+
+    notes.forEach(function(note){
+
+        html += `
+        <div style="
+        background:rgba(255,255,255,0.08);
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:10px;">
+            <h3>${note.title}</h3>
+            <p>${note.content}</p>
+        </div>
+        `;
+    });
+
+    document.getElementById("savedNotes").innerHTML = html;
+}
+
+loadNotes();
+
+</script>
+
+</body>
+</html>

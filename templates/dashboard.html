@@ -14,32 +14,76 @@
 
     <div class="logo">
         🧠 AI Study Assistant
-        <span>Student Dashboard</span>
+        <span>Smart Learning Hub</span>
     </div>
 
     <div class="menu">
-        <a class="active" href="/dashboard">📊 Dashboard</a>
-        <a href="/">🏠 Home</a>
-        <a href="/history">📚 History</a>
-        <a href="#">🤖 AI Tutor</a>
-        <a href="#">📝 Quiz</a>
-        <a href="#">📒 Notes</a>
-        <a href="#">📅 Schedule</a>
-        <a href="/logout">🚪 Logout</a>
+
+        <a class="active" href="/dashboard">
+            📊 Dashboard
+        </a>
+
+        <a href="/">
+            🏠 Home
+        </a>
+
+        <a href="/ai_tutor">
+            🤖 AI Tutor
+        </a>
+
+        <a href="/quiz">
+            📝 Quiz
+        </a>
+
+        <a href="/flashcards">
+            📚 Flashcards
+        </a>
+
+        <a href="/notes">
+            📒 Notes
+        </a>
+
+        <a href="/schedule">
+            📅 Schedule
+        </a>
+
+        <a href="/history">
+            📜 History
+        </a>
+
+        <a href="/upload">
+            📂 Documents
+        </a>
+
+        <a href="/progress">
+            📈 Progress
+        </a>
+        
+        <a href="/profile">
+            👤 Profile
+        </a>
+
+        <a href="/logout">
+            🚪 Logout
+        </a>
+
     </div>
 
 </div>
 
 <div class="main-content">
 
-    <h1>Dashboard</h1>
+    <div class="header">
+        <h1>Welcome Back 🚀</h1>
+        <p>Track your study progress and productivity</p>
+    </div>
 
     <div class="stats">
 
         <div class="stat-box">
             <h3>Study Plans</h3>
             <h2>{{ total_plans }}</h2>
-            <p>Total Created</p>
+            <p>Total Generated</p>
         </div>
 
         <div class="stat-box">
@@ -51,7 +95,7 @@
         <div class="stat-box">
             <h3>Progress</h3>
             <h2>85%</h2>
-            <p>Learning Score</p>
+            <p>Completion</p>
         </div>
 
         <div class="stat-box">
@@ -65,18 +109,51 @@
     <div class="dashboard-grid">
 
         <div class="card">
-            <h2>📈 Study Progress</h2>
+
+            <h2>📈 Study Analytics</h2>
+
             <canvas id="progressChart"></canvas>
+
         </div>
 
         <div class="card">
-            <h2>📘 Subjects Worked On</h2>
+
+            <h2>📘 Subjects Studied</h2>
 
             <ul class="subject-list">
+
                 {% for subject in subjects %}
-                    <li>{{ subject[0] }}</li>
+                <li>{{ subject[0] }}</li>
                 {% endfor %}
+
             </ul>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>⚡ Quick Actions</h2>
+
+        <div class="quick-actions">
+
+            <a href="/ai_tutor">
+                <button>🤖 Ask AI Tutor</button>
+            </a>
+
+            <a href="/notes">
+                <button>📝 Create Notes</button>
+            </a>
+
+            <a href="/quiz">
+                <button>🧠 Take Quiz</button>
+            </a>
+
+            <a href="/upload">
+                <button>📂 Upload Notes</button>
+            </a>
+
         </div>
 
     </div>
@@ -88,38 +165,42 @@
 const totalPlans = parseInt("{{ total_plans }}");
 const totalSubjects = parseInt("{{ subjects|length }}");
 
-const ctx = document.getElementById('progressChart').getContext('2d');
+const ctx = document.getElementById("progressChart");
 
-new Chart(ctx,{
-    type:'bar',
-    data:{
-        labels:['Study Plans','Subjects'],
-        datasets:[{
-            label:'Progress',
-            data:[totalPlans,totalSubjects],
-            backgroundColor:[
-                '#7c5cff',
-                '#00d4ff'
+new Chart(ctx, {
+    type: "bar",
+    data: {
+        labels: ["Study Plans", "Subjects"],
+        datasets: [{
+            label: "Learning Progress",
+            data: [totalPlans, totalSubjects],
+            backgroundColor: [
+                "#7c5cff",
+                "#00d4ff"
             ],
-            borderRadius:10
+            borderRadius: 10
         }]
     },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{
-                    color:'white'
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: "white"
                 }
             }
         },
-        scales:{
-            x:{
-                ticks:{color:'white'}
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: "white"
+                }
             },
-            y:{
-                ticks:{color:'white'},
-                beginAtZero:true
+            x: {
+                ticks: {
+                    color: "white"
+                }
             }
         }
     }
