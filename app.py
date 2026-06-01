@@ -446,7 +446,14 @@ def get_notes():
     conn.close()
     return jsonify(notes)
 
-
+@app.route("/view_document/<filename>")
+def view_document(filename):
+    return send_file(
+        os.path.join(
+            app.config["UPLOAD_FOLDER"],
+            filename
+        )
+    )
 # ---------------- RUN APP ----------------
 if __name__ == "__main__":
     app.run(debug=True)
