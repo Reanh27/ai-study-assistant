@@ -1,55 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Study Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <title>Aether AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
+
 <body>
 
-    <div class="container">
+<div class="app-container">
 
-        <h1>🎓 AI Study Assistant</h1>
-        <p class="subtitle">Plan smarter. Study better. Achieve more.</p>
+    <!-- SIDEBAR -->
 
-        <div class="top-buttons">
-            <a href="/dashboard"><button>📊 Dashboard</button></a>
-            <a href="/history"><button>📚 History</button></a>
-            <a href="/logout"><button>🚪 Logout</button></a>
-        </div>
+    <aside class="sidebar">
 
-        <div class="card">
-            <h2>📅 Generate Your Study Plan</h2>
+        <div class="logo">
 
-            <form id="studyForm">
-                <input type="text" id="subject" placeholder="Enter subject" required>
-                <input type="number" id="hours" placeholder="Study hours available" required>
-                <input type="text" id="weakness" placeholder="Weak topics" required>
-
-                <button type="submit">Generate Study Plan</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2>📘 Your Personalized Study Plan</h2>
-            <ul id="result"></ul>
-        </div>
-
-        <div class="card">
-            <h2>🤖 AI Study Chatbot</h2>
-
-            <input type="text" id="chatInput" placeholder="Ask me anything about studies...">
-            <button onclick="askAI()">Ask AI</button>
-
-            <div class="chat-box">
-                <p id="chatResponse">Hello! I'm your AI study assistant.</p>
+            <div class="logo-circle">
+                AI
             </div>
+
+            <h2>Aether AI</h2>
+
         </div>
+
+        <div class="menu">
+
+            <button class="menu-btn active" onclick="showSection('chat')">
+                <i class="fas fa-comments"></i>
+                Chat
+            </button>
+
+            <button class="menu-btn" onclick="showSection('notes')">
+                <i class="fas fa-book"></i>
+                Notes
+            </button>
+
+            <button class="menu-btn" onclick="showSection('study')">
+                <i class="fas fa-graduation-cap"></i>
+                Study
+            </button>
+
+            <button class="menu-btn" onclick="showSection('math')">
+                <i class="fas fa-calculator"></i>
+                Math
+            </button>
+
+            <button class="menu-btn" onclick="showSection('chemistry')">
+                <i class="fas fa-flask"></i>
+                Chemistry
+            </button>
+
+            <button class="menu-btn" onclick="showSection('aero')">
+                <i class="fas fa-rocket"></i>
+                Aeronautics
+            </button>
+
+            <button class="menu-btn" onclick="showSection('cyber')">
+                <i class="fas fa-shield-alt"></i>
+                Cybersecurity
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+
+        <div class="top-bar">
+
+            <div>
+
+                <h1>Aether AI</h1>
+
+                <p>
+                    Offline AI Study Assistant
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- CHAT -->
+
+        <div id="chat-section" class="section">
+
+            <div class="bot-message">
+
+                <div class="message-content">
+
+                    <strong>👋 Welcome to Aether AI</strong>
+
+                    <br><br>
+
+                    Ask me about:
+
+                    <br>• Artificial Intelligence
+                    <br>• Programming
+                    <br>• Python
+                    <br>• Java
+                    <br>• Android
+                    <br>• Cybersecurity
+                    <br>• Mathematics
+                    <br>• Physics
+                    <br>• Chemistry
+                    <br>• Aeronautical Engineering
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="study-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>📚 Study Center</h2>
+
+        <br>
+
+        <p>Ask:</p>
+
+        <ul>
+            <li>quiz python</li>
+            <li>quiz ai</li>
+            <li>quiz physics</li>
+        </ul>
 
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</div>
+
+<div id="math-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🧮 Formula Center</h2>
+
+        <br>
+
+        <p>Try:</p>
+
+        <ul>
+            <li>lift</li>
+            <li>drag</li>
+            <li>kinetic energy</li>
+            <li>bernoulli</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<div id="chemistry-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🧪 Chemistry Hub</h2>
+
+        <p>Ask about:</p>
+
+        <ul>
+            <li>atoms</li>
+            <li>periodic table</li>
+            <li>chemistry</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<div id="aero-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>✈ Aeronautics Hub</h2>
+
+        <p>Topics:</p>
+
+        <ul>
+            <li>airfoil</li>
+            <li>lift</li>
+            <li>drag</li>
+            <li>mach number</li>
+            <li>shock wave</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<div id="cyber-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🛡 Cybersecurity Hub</h2>
+
+        <p>Topics:</p>
+
+        <ul>
+            <li>cybersecurity</li>
+            <li>hacking</li>
+            <li>network</li>
+            <li>linux</li>
+        </ul>
+
+    </div>
+
+</div>
+
+        <!-- INPUT BAR -->
+
+        <div class="input-area">
+
+            <button
+                id="voice-btn"
+                onclick="startVoiceRecognition()">
+
+                🎤
+
+            </button>
+
+            <input
+                id="user-input"
+                type="text"
+                placeholder="Ask Aether AI anything...">
+
+            <button
+                id="send-btn"
+                onclick="sendMessage()">
+
+                Send
+
+            </button>
+
+        </div>
+
+    </main>
+
+    <!-- RIGHT PANEL -->
+
+    <aside class="right-panel">
+
+        <h3>Quick Notes</h3>
+
+        <textarea
+            id="note-text"
+            placeholder="Write your study notes here...">
+        </textarea>
+
+        <button
+            class="save-note-btn"
+            onclick="saveNote()">
+
+            Save Note
+
+        </button>
+
+        <div
+            id="notes-list"
+            class="notes-list">
+
+        </div>
+
+    </aside>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
