@@ -15,18 +15,32 @@ class AetherBot:
 ]
 
          self.quizzes = {
+
     "python": [
-        "Q1: Which keyword is used to define a function in Python?\nA) func\nB) define\nC) def\nD) function\n\nAnswer: C"
+
+        "Q1: Which keyword defines a function?\nA) func\nB) define\nC) def\nD) function\n\nAnswer: C",
+
+        "Q2: Which data type stores text?\nA) int\nB) str\nC) float\nD) bool\n\nAnswer: B",
+
+        "Q3: Python is a?\nA) Compiler\nB) Language\nC) Database\nD) OS\n\nAnswer: B"
     ],
 
     "ai": [
-        "Q1: What does AI stand for?\nA) Artificial Intelligence\nB) Automated Interface\nC) Advanced Internet\nD) Algorithmic Input\n\nAnswer: A"
+
+        "Q1: What does AI stand for?\nA) Artificial Intelligence\nB) Automated Interface\nC) Advanced Internet\nD) Algorithmic Input\n\nAnswer: A",
+
+        "Q2: Machine Learning is a subset of?\nA) Physics\nB) Chemistry\nC) AI\nD) Networking\n\nAnswer: C"
     ],
 
     "physics": [
-        "Q1: What is Newton's Second Law?\nAnswer: F = ma"
+
+        "Q1: Newton's Second Law?\nAnswer: F = ma",
+
+        "Q2: SI Unit of Force?\nAnswer: Newton",
+
+        "Q3: Speed of Light?\nAnswer: 3 × 10⁸ m/s"
     ]
-}
+         }
          self.formulas = {
 
     "lift":

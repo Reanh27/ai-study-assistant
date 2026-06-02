@@ -10,7 +10,11 @@ function showTyping() {
 
     typingDiv.innerHTML = `
         <div class="message-content">
-            Aether AI is typing...
+            <div class="typing">
+             <span></span>
+             <span></span>
+             <span></span>
+             </div>
         </div>
     `;
 
@@ -380,31 +384,29 @@ window.onload = function () {
 };
 function showSection(section){
 
-    document
-    .querySelectorAll(".section")
-    .forEach(s => s.classList.add("hidden"));
+    document.querySelectorAll(".section")
+    .forEach(sec => sec.classList.add("hidden"));
 
-    if(section === "chat")
-        document.getElementById("chat-section")
-        .classList.remove("hidden");
+    document.getElementById(section + "-section")
+    .classList.remove("hidden");
 
-    if(section === "study")
-        document.getElementById("study-section")
-        .classList.remove("hidden");
+    document.querySelectorAll(".menu-btn")
+    .forEach(btn => btn.classList.remove("active"));
 
-    if(section === "math")
-        document.getElementById("math-section")
-        .classList.remove("hidden");
+    event.target.closest(".menu-btn")
+    .classList.add("active");
+}
+function startQuiz(subject){
 
-    if(section === "chemistry")
-        document.getElementById("chemistry-section")
-        .classList.remove("hidden");
+    document.getElementById("user-input")
+    .value = "quiz " + subject;
 
-    if(section === "aero")
-        document.getElementById("aero-section")
-        .classList.remove("hidden");
+    sendMessage();
 
-    if(section === "cyber")
-        document.getElementById("cyber-section")
-        .classList.remove("hidden");
+    document.getElementById(
+        "quiz-result"
+    ).innerHTML =
+
+    "Quiz loaded: " +
+    subject.toUpperCase();
 }

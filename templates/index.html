@@ -26,7 +26,7 @@
         <div class="logo">
 
             <div class="logo-circle">
-                AI
+                🤖
             </div>
 
             <h2>Aether AI</h2>
@@ -36,40 +36,28 @@
         <div class="menu">
 
             <button class="menu-btn active" onclick="showSection('chat')">
-                <i class="fas fa-comments"></i>
-                Chat
+                <i class="fas fa-comments"></i> Chat
             </button>
 
-            <button class="menu-btn" onclick="showSection('notes')">
-                <i class="fas fa-book"></i>
-                Notes
+             <button class="menu-btn" onclick="showSection('study')">
+                 <i class="fas fa-graduation-cap"></i> Study
+             </button>
+ 
+           <button class="menu-btn" onclick="showSection('math')">
+    <i class="fas fa-calculator"></i> Math
+           </button>
+
+           <button class="menu-btn" onclick="showSection('chemistry')">
+             <i class="fas fa-flask"></i> Chemistry
+           </button>
+
+           <button class="menu-btn" onclick="showSection('aero')">
+              <i class="fas fa-rocket"></i> Aeronautics
             </button>
 
-            <button class="menu-btn" onclick="showSection('study')">
-                <i class="fas fa-graduation-cap"></i>
-                Study
-            </button>
-
-            <button class="menu-btn" onclick="showSection('math')">
-                <i class="fas fa-calculator"></i>
-                Math
-            </button>
-
-            <button class="menu-btn" onclick="showSection('chemistry')">
-                <i class="fas fa-flask"></i>
-                Chemistry
-            </button>
-
-            <button class="menu-btn" onclick="showSection('aero')">
-                <i class="fas fa-rocket"></i>
-                Aeronautics
-            </button>
-
-            <button class="menu-btn" onclick="showSection('cyber')">
-                <i class="fas fa-shield-alt"></i>
-                Cybersecurity
-            </button>
-
+           <button class="menu-btn" onclick="showSection('cyber')">
+             <i class="fas fa-shield-alt"></i> Cybersecurity
+           </button>
         </div>
 
     </aside>
@@ -94,43 +82,141 @@
 
         </div>
 
-        <!-- CHAT -->
-
-        <!-- CHAT SECTION -->
+        <<!-- CHAT -->
 
 <div id="chat-section" class="section">
 
     <div id="chat-box" class="chat-box">
 
         <div class="bot-message">
-
             <div class="message-content">
 
-                <strong>👋 Welcome to Aether AI</strong>
+                👋 Welcome to Aether AI
 
                 <br><br>
 
-                Ask me about:
-
-                <br>• Artificial Intelligence
-                <br>• Programming
-                <br>• Python
-                <br>• Java
-                <br>• Android
-                <br>• Cybersecurity
-                <br>• Mathematics
-                <br>• Physics
-                <br>• Chemistry
-                <br>• Aeronautical Engineering
+                Ask me anything.
 
             </div>
-
         </div>
 
     </div>
 
 </div>
 
+<!-- STUDY -->
+
+<div class="chat-box">
+
+    <h2>📚 Quiz Center</h2>
+
+    <br>
+
+    <button onclick="startQuiz('python')" class="save-note-btn">
+        Python Quiz
+    </button>
+
+    <br><br>
+
+    <button onclick="startQuiz('ai')" class="save-note-btn">
+        AI Quiz
+    </button>
+
+    <br><br>
+
+    <button onclick="startQuiz('physics')" class="save-note-btn">
+        Physics Quiz
+    </button>
+
+    <br><br>
+
+    <div id="quiz-result"></div>
+
+</div>
+
+<!-- MATH -->
+
+<div id="math-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🧮 Formula Center</h2>
+
+        <br>
+
+        <ul>
+            <li>lift</li>
+            <li>drag</li>
+            <li>kinetic energy</li>
+            <li>bernoulli</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- CHEMISTRY -->
+
+<div id="chemistry-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🧪 Chemistry Hub</h2>
+
+        <br>
+
+        <ul>
+            <li>atom</li>
+            <li>periodic table</li>
+            <li>chemistry</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- AERO -->
+
+<div id="aero-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>✈ Aeronautics Hub</h2>
+
+        <br>
+
+        <ul>
+            <li>airfoil</li>
+            <li>lift</li>
+            <li>drag</li>
+            <li>mach number</li>
+            <li>shock wave</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<!-- CYBER -->
+
+<div id="cyber-section" class="section hidden">
+
+    <div class="chat-box">
+
+        <h2>🛡 Cybersecurity Hub</h2>
+
+        <br>
+
+        <ul>
+            <li>cybersecurity</li>
+            <li>hacking</li>
+            <li>linux</li>
+            <li>network</li>
+        </ul>
+
+    </div>
+
+</div>
 <!-- STUDY SECTION -->
 
 <div id="study-section" class="section hidden">

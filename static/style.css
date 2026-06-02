@@ -15,6 +15,15 @@
 
 body{
     background:
+    radial-gradient(circle at top left,#00ffe755,transparent 30%),
+    radial-gradient(circle at top right,#7b2cff55,transparent 30%),
+    #050505;
+
+    color:white;
+}
+
+body{
+    background:
     radial-gradient(circle at top left,#052b1a,#050505 45%),
     radial-gradient(circle at bottom right,#12052e,#050505 40%);
     color:white;
@@ -32,11 +41,16 @@ body{
 /* SIDEBAR */
 
 .sidebar{
-    width:260px;
-    background:rgba(5,5,5,0.9);
+
+    width:280px;
+
+    background:rgba(10,10,20,0.8);
+
     backdrop-filter:blur(20px);
-    border-right:1px solid rgba(0,255,136,0.3);
-    padding:20px;
+
+    border-right:1px solid rgba(0,255,170,0.2);
+
+    padding:25px;
 }
 
 /* LOGO */
@@ -47,30 +61,36 @@ body{
 }
 
 .logo-circle{
-    width:95px;
-    height:95px;
+
+    width:110px;
+
+    height:110px;
+
     margin:auto;
+
     border-radius:50%;
+
     background:linear-gradient(
-    135deg,
-    var(--green),
-    var(--cyan),
-    var(--purple)
+        135deg,
+        #00ffe7,
+        #7b2cff
     );
 
     display:flex;
+
     justify-content:center;
+
     align-items:center;
 
-    color:black;
-    font-size:32px;
+    font-size:42px;
+
     font-weight:bold;
 
-    animation:pulse 3s infinite;
+    color:black;
 
     box-shadow:
-    0 0 25px var(--green),
-    0 0 50px var(--cyan);
+    0 0 30px #00ffe7,
+    0 0 60px #7b2cff;
 }
 
 .logo h2{
@@ -91,54 +111,65 @@ body{
 
 /* MENU */
 
-.menu{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-}
-
 .menu-btn{
-    background:rgba(20,20,20,0.7);
-    backdrop-filter:blur(15px);
+
+    width:100%;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(0,255,170,0.25);
+
+    background:rgba(255,255,255,0.03);
 
     color:white;
-    border:1px solid rgba(0,255,136,0.4);
 
-    padding:16px;
-    border-radius:16px;
+    font-size:1.1rem;
 
     cursor:pointer;
 
-    font-size:18px;
+    transition:all .35s ease;
 
-    transition:0.35s;
+    backdrop-filter:blur(15px);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
 }
 
 .menu-btn:hover{
-    transform:translateX(8px);
+
+    transform:translateX(10px);
 
     background:linear-gradient(
-    135deg,
-    var(--green),
-    var(--cyan)
+        135deg,
+        #00ffe7,
+        #7b2cff
     );
 
-    color:black;
+    color:white;
 
     box-shadow:
-    0 0 15px var(--green),
-    0 0 30px var(--cyan);
+    0 0 20px #00ffe7,
+    0 0 40px #7b2cff;
 }
 
 .active{
+
     background:linear-gradient(
-    135deg,
-    var(--green),
-    var(--cyan)
+        135deg,
+        #00ffe7,
+        #7b2cff
     );
 
-    color:black;
-    font-weight:bold;
+    color:white;
+
+    box-shadow:
+    0 0 20px #00ffe7,
+    0 0 40px #7b2cff;
 }
 
 /* MAIN */
@@ -527,4 +558,120 @@ body::after{
 #chat-box{
     overflow-y:auto;
     scroll-behavior:smooth;
+}
+.avatar{
+    width:90px;
+    border-radius:50%;
+    box-shadow:
+    0 0 25px #00ffe7,
+    0 0 50px #7b2cff;
+}
+
+.menu-btn{
+
+    transition:.3s;
+}
+
+.menu-btn:hover{
+
+    transform:translateX(10px);
+
+    box-shadow:
+    0 0 20px #00ffe7;
+}
+
+.bot-message .message-content{
+
+    background:rgba(255,255,255,.05);
+
+    border-left:4px solid #7b2cff;
+
+    backdrop-filter:blur(15px);
+}
+
+.user-message .message-content{
+
+    background:linear-gradient(
+        135deg,
+        #00ffe7,
+        #00ff88
+    );
+
+    color:black;
+}
+
+.typing span{
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:#00ffe7;
+
+    display:inline-block;
+
+    animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-6px);
+}
+}
+
+.hidden{
+    display:none;
+}
+
+.section{
+    flex:1;
+}
+
+#quiz-result{
+
+    margin-top:20px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:rgba(0,255,170,0.1);
+
+    border:1px solid #00ffaa;
+
+    color:#00ffaa;
+
+    text-align:center;
+
+    font-weight:bold;
+}
+
+.study-buttons{
+    display:flex;
+    gap:10px;
+    margin:12px 0;
+}
+
+.study-btn{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(
+        135deg,
+        #00ffb3,
+        #4d6bff,
+        #a855f7
+    );
+
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
